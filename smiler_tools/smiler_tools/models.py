@@ -7,6 +7,7 @@ import re
 import tempfile
 import zipfile
 import urllib
+import urllib.request
 import json
 import grp
 import getpass
@@ -35,6 +36,7 @@ https://github.com/NVIDIA/nvidia-docker
 
 if distutils.spawn.find_executable("docker"):
     NVIDIA_DOCKER_INSTALLED = True
+    print("hi")
 else:
     NVIDIA_DOCKER_INSTALLED = False
 
@@ -95,7 +97,7 @@ class SMILERModel(object):
 
     def _download_and_extract_model_files(self):
         url = MODEL_BASE_URL + self.name + "/model.zip"
-
+        print("URL>>>>>>>>>>>>>:", url)
         temp_dir_path = tempfile.mkdtemp()
         temp_file = "model.zip"
         temp_file_path = os.path.join(temp_dir_path, temp_file)
@@ -133,10 +135,12 @@ class DockerModel(SMILERModel):
 
     def _run_in_shell(self, command, docker_or_sudo=True, verbose=False):
         if docker_or_sudo:
-            if getpass.getuser() in grp.getgrnam("docker").gr_mem:
-                pass
-            else:
-                command = ["/usr/bin/sudo"] + command
+            command = ["/usr/bin/sudo"] + command
+            # if getpass.getuser() in grp.getgrnam("docker").gr_mem:
+            #     pass
+            ##### SHOULD NOT THROW ERROR MAYBE FIX
+            # else:
+            #     command = ["/usr/bin/sudo"] + command
 
         if verbose:
             print("Running:\n{}".format(command))

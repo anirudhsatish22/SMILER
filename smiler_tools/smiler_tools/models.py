@@ -22,7 +22,7 @@ from smiler_tools.parameters import ParameterMap
 HERE_PATH = os.path.dirname(os.path.realpath(__file__))
 MATLAB_TOOLS_PATH = os.path.join(HERE_PATH, '..', '..', 'smiler_matlab_tools')
 
-MODEL_BASE_URL = "https://www.eecs.yorku.ca/rspace-jtfarm/SMILER/"
+MODEL_BASE_URL = "https://data.nvision.eecs.yorku.ca/smiler/"
 
 NO_NVIDIA_DOCKER_WARNING_MSG = """WARNING: nvidia-docker not found!
 See here for installation instructions:
@@ -33,7 +33,7 @@ https://github.com/NVIDIA/nvidia-docker
 # Setup
 ############################################################
 
-if distutils.spawn.find_executable("nvidia-docker"):
+if distutils.spawn.find_executable("docker"):
     NVIDIA_DOCKER_INSTALLED = True
 else:
     NVIDIA_DOCKER_INSTALLED = False
@@ -162,7 +162,7 @@ class DockerModel(SMILERModel):
         parameter_map.update(experiment_parameter_map)
 
         model_run_command = [
-            "nvidia-docker", "run", "-it", "--volume",
+            "docker", "run", "-it", "--volume",
             "{}:/opt/model".format(model_dir), "--volume",
             "{}:/opt/input_vol".format(input_dir), "--volume",
             "{}:/opt/output_vol".format(output_dir), "--shm-size=128m", "-e",
@@ -180,7 +180,7 @@ class DockerModel(SMILERModel):
         model_dir = os.path.join(self.path, 'model')
 
         model_run_command = [
-            "nvidia-docker", "run", "-it", "--volume",
+            "docker", "run", "-it", "--volume",
             "{}:/opt/model".format(model_dir), "-w", "/opt/model", "--rm",
             self.docker_image
         ] + self.shell_command

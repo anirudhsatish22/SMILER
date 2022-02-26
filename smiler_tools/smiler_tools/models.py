@@ -105,6 +105,9 @@ class SMILERModel(object):
         # urlopener = urllib.request.urlretrieve(url, temp_file_path)  
         try:
             # urlopener.retrieve(url, temp_file_path)
+            ####################################
+            ### Changed top line to the one below 
+            ############################
             urllib.request.urlretrieve(url, temp_file_path)  
             with zipfile.ZipFile(temp_file_path, 'r') as zip_fp:
                 zip_fp.extractall(os.path.join(self.path, "model"))
@@ -136,6 +139,11 @@ class DockerModel(SMILERModel):
     def _run_in_shell(self, command, docker_or_sudo=True, verbose=False):
         if docker_or_sudo:
             command = ["/usr/bin/sudo"] + command
+            ############################################
+            # the next line threw an error becuase i didnt give docker sudo
+            # access. if you do so u should be able to uncomment the next few lines, and comment out 
+            # the command line above (i basically moved it out of the else)
+
             # if getpass.getuser() in grp.getgrnam("docker").gr_mem:
             #     pass
             ##### SHOULD NOT THROW ERROR MAYBE FIX

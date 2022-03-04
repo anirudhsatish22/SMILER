@@ -40,6 +40,9 @@ def main():
     log_density_wo_centerbias = tf.get_collection('log_density_wo_centerbias')[
         0]
 
+    config = tf.ConfigProto(
+        device_count = {'GPU': 0}
+    )
     sess = tf.Session()
     saver.restore(sess, check_point)
 
